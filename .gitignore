@@ -17,7 +17,7 @@
 /build
 
 # core
-/core/
+# /core/
 
 # misc
 .DS_Store
