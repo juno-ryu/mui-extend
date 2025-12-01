@@ -182,7 +182,8 @@ export default function ComponentDetailPage({
                 </div>
                 <div className="border rounded-lg p-4 bg-muted/50">
                   <div className="font-mono text-sm font-semibold mb-1">
-                    frontBumper?: 'thick' | 'thin' | 'both'
+                    frontBumper?: &apos;thick&apos; | &apos;thin&apos; |
+                    &apos;both&apos;
                   </div>
                   <p className="text-sm text-muted-foreground">
                     버튼 앞쪽(왼쪽) 여백을 제어합니다. 아이콘과 텍스트 사이
@@ -191,7 +192,8 @@ export default function ComponentDetailPage({
                 </div>
                 <div className="border rounded-lg p-4 bg-muted/50">
                   <div className="font-mono text-sm font-semibold mb-1">
-                    backBumper?: 'thick' | 'thin' | 'both'
+                    backBumper?: &apos;thick&apos; | &apos;thin&apos; |
+                    &apos;both&apos;
                   </div>
                   <p className="text-sm text-muted-foreground">
                     버튼 뒤쪽(오른쪽) 여백을 제어합니다. 텍스트와 아이콘 사이
@@ -219,15 +221,21 @@ export default function ComponentDetailPage({
                     <code className="text-xs bg-background px-1 py-0.5 rounded">
                       variant
                     </code>
-                    : <span className="text-muted-foreground">'contained'</span>{" "}
-                    (MUI 기본값: 'text')
+                    :{" "}
+                    <span className="text-muted-foreground">
+                      &apos;contained&apos;
+                    </span>{" "}
+                    (MUI 기본값: &apos;text&apos;)
                   </li>
                   <li>
                     <code className="text-xs bg-background px-1 py-0.5 rounded">
                       size
                     </code>
-                    : <span className="text-muted-foreground">'small'</span>{" "}
-                    (MUI 기본값: 'medium')
+                    :{" "}
+                    <span className="text-muted-foreground">
+                      &apos;small&apos;
+                    </span>{" "}
+                    (MUI 기본값: &apos;medium&apos;)
                   </li>
                   <li>
                     <code className="text-xs bg-background px-1 py-0.5 rounded">
@@ -235,7 +243,7 @@ export default function ComponentDetailPage({
                     </code>
                     :{" "}
                     <span className="text-muted-foreground">
-                      'augment/gray/800'
+                      &apos;augment/gray/800&apos;
                     </span>{" "}
                     (커스텀 색상 팔레트)
                   </li>
@@ -300,7 +308,7 @@ export default function ComponentDetailPage({
                   <li>
                     • 텍스트 변환 제거 (
                     <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      textTransform: 'none'
+                      textTransform: &apos;none&apos;
                     </code>
                     )
                   </li>
