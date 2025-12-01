@@ -9,3 +9,11 @@ else
   echo "Core directory already exists, skipping clone."
 fi
 
+# core의 package.json이 있는지 확인
+if [ ! -f "core/package.json" ]; then
+  echo "Error: core/package.json not found!"
+  exit 1
+fi
+
+echo "Core repository setup complete."
+
