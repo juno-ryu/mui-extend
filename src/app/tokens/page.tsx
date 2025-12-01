@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Palette, Monitor, Layers, Box, Sparkles } from "lucide-react";
+import { AppBreadcrumb } from "@/components/layout/breadcrumb";
 
 // Breakpoint 데이터
 const breakpoints = {
@@ -330,6 +331,13 @@ export default function TokensPage() {
 
   return (
     <div className="space-y-8">
+      <AppBreadcrumb
+        items={[
+          { label: "홈", href: "/" },
+          { label: "디자인 토큰" },
+        ]}
+      />
+
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">

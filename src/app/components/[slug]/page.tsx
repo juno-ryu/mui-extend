@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { getComponentDetailConfig } from "@/features/showcase/lib/component-detail-configs";
 import { CodeSnippet } from "@/features/showcase/components/code-snippet";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AppBreadcrumb } from "@/components/layout/breadcrumb";
 import {
   Table,
   TableBody,
@@ -65,6 +66,15 @@ export default function ComponentDetailPage({
 
   return (
     <div className="max-w-5xl mx-auto space-y-15">
+      {/* Breadcrumb */}
+      <AppBreadcrumb
+        items={[
+          { label: "홈", href: "/" },
+          { label: "Components", href: "/components" },
+          { label: component.name },
+        ]}
+      />
+
       {/* 헤더 */}
       <div className="space-y-3">
         <div className="flex items-center gap-3">
@@ -76,7 +86,7 @@ export default function ComponentDetailPage({
         <p className="text-sm text-muted-foreground">{component.description}</p>
         {detailConfig?.designNote && (
           <div className="space-y-4">
-            <Alert className="border-primary/20 bg-primary/5">
+            <Alert>
               <CheckCircle2Icon className="h-4 w-4" />
               <div>
                 <AlertTitle className="text-sm font-semibold">
@@ -108,65 +118,28 @@ export default function ComponentDetailPage({
           </div>
         )}
       </div>
-      {/* 기본 Preview */}
+      {/* Preview */}
       {component.componentName && (
         <DesignSystemPreviewShell>
           <div className="space-y-4">
             {detailConfig?.usageExamples &&
-              detailConfig.usageExamples
-                .filter(
-                  (example) => !example.section || example.section === "basic"
-                )
-                .map((example, idx) => (
-                  <div key={idx} className="space-y-4">
-                    {example.title && (
-                      <h3 className="text-base font-semibold">
-                        {example.title}
-                      </h3>
-                    )}
-                    <div className="border rounded-lg p-6 bg-background">
-                      <div className="flex flex-wrap gap-4 items-center">
-                        {example.render &&
-                          (() => {
-                            const Render = example.render!;
-                            return <Render />;
-                          })()}
-                      </div>
+              detailConfig.usageExamples.map((example, idx) => (
+                <div key={idx} className="space-y-4">
+                  {example.title && (
+                    <h3 className="text-base font-semibold">{example.title}</h3>
+                  )}
+                  <div className="border rounded-lg p-6 bg-background">
+                    <div className="flex flex-wrap gap-4 items-center">
+                      {example.render &&
+                        (() => {
+                          const Render = example.render!;
+                          return <Render />;
+                        })()}
                     </div>
-                    <CodeSnippet code={example.code} />
                   </div>
-                ))}
-          </div>
-        </DesignSystemPreviewShell>
-      )}
-
-      {/* Variants */}
-      {component.variants && component.variants.length > 0 && (
-        <DesignSystemPreviewShell>
-          <div className="space-y-4">
-            {/* Color 조합 예제 - 탭과 무관하게 공통으로 표시 */}
-            {detailConfig?.usageExamples &&
-              detailConfig.usageExamples
-                .filter((example) => example.section === "variants")
-                .map((example, idx) => (
-                  <div key={idx} className="space-y-3 mt-4">
-                    {example.title && (
-                      <h3 className="text-base font-semibold">
-                        {example.title}
-                      </h3>
-                    )}
-                    <div className="border rounded-lg p-6 bg-background">
-                      <div className="flex flex-wrap gap-4 items-center">
-                        {example.render &&
-                          (() => {
-                            const Render = example.render!;
-                            return <Render />;
-                          })()}
-                      </div>
-                    </div>
-                    <CodeSnippet code={example.code} />
-                  </div>
-                ))}
+                  <CodeSnippet code={example.code} />
+                </div>
+              ))}
           </div>
         </DesignSystemPreviewShell>
       )}
@@ -328,7 +301,7 @@ export default function ComponentDetailPage({
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">사용법</h2>
         <Alert>
-          <Zap className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+          <Zap className="h-4 w-4 fill-yellow-400" />
           <div>
             <AlertTitle className="text-sm font-semibold">
               MUI 공식 문서

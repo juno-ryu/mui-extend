@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { useComponentData } from "@/features/showcase/hooks/use-component-data";
 
 interface SidebarProps {
@@ -44,36 +45,48 @@ export function Sidebar({
           SECTIONS
         </h2>
         <div className="space-y-1">
-          <Link
-            href="/"
-            className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-              isActive("/")
-                ? "bg-primary/10 text-primary font-medium"
-                : "text-foreground hover:bg-muted"
-            }`}
-          >
-            홈
-          </Link>
-          <Link
-            href="/tokens"
-            className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-              isActive("/tokens")
-                ? "bg-primary/10 text-primary font-medium"
-                : "text-foreground hover:bg-muted"
-            }`}
-          >
-            디자인 토큰
-          </Link>
-          <Link
-            href="/playground"
-            className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-              isActive("/playground")
-                ? "bg-primary/10 text-primary font-medium"
-                : "text-foreground hover:bg-muted"
-            }`}
-          >
-            Playground
-          </Link>
+          <Button asChild variant="ghost" className={`w-full justify-between `}>
+            <Link href="/">
+              <span className="flex w-full items-center justify-between gap-2">
+                <span>홈</span>
+                {isActive("/") && (
+                  <span
+                    aria-hidden
+                    className="rounded-full bg-sky-600"
+                    style={{ width: 6, height: 6 }}
+                  />
+                )}
+              </span>
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" className={`w-full justify-between`}>
+            <Link href="/tokens">
+              <span className="flex w-full items-center justify-between gap-2">
+                <span>디자인 토큰</span>
+                {isActive("/tokens") && (
+                  <span
+                    aria-hidden
+                    className="rounded-full bg-sky-600"
+                    style={{ width: 6, height: 6 }}
+                  />
+                )}
+              </span>
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" className={`w-full justify-between`}>
+            <Link href="/components">
+              <span className="flex w-full items-center justify-between gap-2">
+                <span>컴포넌트</span>
+                {isActive("/components") && (
+                  <span
+                    aria-hidden
+                    className="rounded-full bg-sky-600"
+                    style={{ width: 6, height: 6 }}
+                  />
+                )}
+              </span>
+            </Link>
+          </Button>
         </div>
       </div>
 
@@ -99,19 +112,33 @@ export function Sidebar({
                 <AccordionContent className="pl-4 pt-1">
                   <div className="space-y-1">
                     {categoryComponents.length > 0 ? (
-                      categoryComponents.map((component) => (
-                        <Link
-                          key={component.id}
-                          href={`/components/${component.slug}`}
-                          className={`block px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                            pathname === `/components/${component.slug}`
-                              ? "bg-primary/10 text-primary font-medium"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                          }`}
-                        >
-                          {component.name}
-                        </Link>
-                      ))
+                      categoryComponents.map((component) => {
+                        const active =
+                          pathname === `/components/${component.slug}`;
+
+                        return (
+                          <div key={component.id}>
+                            <Button
+                              asChild
+                              variant="ghost"
+                              className={`w-full justify-between`}
+                            >
+                              <Link href={`/components/${component.slug}`}>
+                                <span className="flex w-full items-center justify-between gap-2">
+                                  <span>{component.name}</span>
+                                  {active && (
+                                    <span
+                                      aria-hidden
+                                      className="rounded-full bg-sky-600"
+                                      style={{ width: 6, height: 6 }}
+                                    />
+                                  )}
+                                </span>
+                              </Link>
+                            </Button>
+                          </div>
+                        );
+                      })
                     ) : (
                       <div className="px-3 py-1.5 text-sm text-muted-foreground">
                         컴포넌트가 없습니다

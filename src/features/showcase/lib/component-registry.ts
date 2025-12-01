@@ -100,7 +100,8 @@ const components: ComponentMetadata[] = [
     name: "Avatar",
     slug: "avatar",
     category: "data-display",
-    description: "사용자 프로필 이미지나 이니셜을 표시하는 아바타 컴포넌트입니다.",
+    description:
+      "사용자 프로필 이미지나 이니셜을 표시하는 아바타 컴포넌트입니다.",
     importPath: "@/core/design-systems",
     componentName: "Avatar",
     previewProps: {
@@ -169,4 +170,3 @@ export function registerComponent(metadata: ComponentMetadata): void {
     components.push(metadata);
   }
 }
-
