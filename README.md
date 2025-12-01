@@ -1,6 +1,6 @@
 # MUI Extend
 
-Next.js 기반 프로젝트입니다.
+Next.js 기반의 쇼케이스 프로젝트입니다.
 
 ## 기술 스택
 
@@ -8,12 +8,12 @@ Next.js 기반 프로젝트입니다.
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn-ui
-- **State Management**: 
+- **State Management**:
   - Zustand (전역 상태)
   - @tanstack/react-query (서버 상태)
 - **Form**: react-hook-form + zod
 - **Icons**: lucide-react
-- **Utilities**: 
+- **Utilities**:
   - dayjs (날짜/시간)
   - ts-pattern (패턴 매칭)
   - es-toolkit (유틸리티)
@@ -40,6 +40,38 @@ src/features/
     └── api.ts       # API 함수
 ```
 
+## 설정
+
+### Core 저장소 클론 및 Workspace 설정
+
+이 프로젝트는 `core` 저장소를 workspace로 사용합니다. 다음 단계를 따라 설정하세요.
+
+#### 1. Core 저장소 클론
+
+```bash
+git clone https://github.com/juno-ryu/core.git core
+```
+
+#### 2. Workspace 설정 확인
+
+`package.json`에 이미 workspace 설정이 포함되어 있습니다:
+
+```json
+{
+  "workspaces": ["core"]
+}
+```
+
+#### 3. 의존성 설치
+
+```bash
+npm install
+```
+
+이 명령어는 루트 프로젝트와 `core` workspace의 모든 의존성을 자동으로 설치합니다.
+
+> **참고**: Vercel 배포 시에는 `scripts/install.sh`가 자동으로 core 저장소를 클론하고 의존성을 설치합니다.
+
 ## 시작하기
 
 ### 개발 서버 실행
@@ -61,34 +93,3 @@ npm run build
 ```bash
 npm start
 ```
-
-## shadcn-ui 컴포넌트 추가
-
-새로운 shadcn-ui 컴포넌트를 추가하려면:
-
-```bash
-npx shadcn@latest add [component-name]
-```
-
-예시:
-```bash
-npx shadcn@latest add button
-npx shadcn@latest add card
-npx shadcn@latest add dialog
-```
-
-## 네이밍 컨벤션
-
-- **파일명**: kebab-case 사용
-  - ✅ `feed-page.tsx`, `post-card.tsx`, `use-posts.ts`
-  - ❌ `FeedPage.tsx`, `PostCard.tsx`, `usePosts.ts`
-
-- **컴포넌트**: PascalCase로 export
-- **훅**: camelCase로 export
-
-## 주의사항
-
-- 모든 컴포넌트는 `"use client"` 디렉티브를 사용해야 합니다.
-- `page.tsx`의 params props는 Promise를 사용해야 합니다.
-- Tailwind CSS v4를 사용하고 있습니다.
-

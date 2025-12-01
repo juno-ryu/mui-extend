@@ -36,9 +36,6 @@
 * {
   border-color: hsl(var(--color-border));
 }
-html {
-  font-size: 14px;
-}
 body {
   color: hsl(var(--color-foreground));
   background: hsl(var(--color-background));

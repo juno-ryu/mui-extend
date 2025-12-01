@@ -2,15 +2,38 @@
 
 import React from "react";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
-import { ComponentPreview } from "@/features/showcase/components/component-preview";
+import { CheckCircle2Icon, ExternalLink, Zap } from "lucide-react";
 import { useComponentData } from "@/features/showcase/hooks/use-component-data";
 import { getCategoryLabel } from "@/features/showcase/constants/categories";
 import { notFound } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getComponentDetailConfig } from "@/features/showcase/lib/component-detail-configs";
+import { CodeSnippet } from "@/features/showcase/components/code-snippet";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CssBaseline } from "@mui/material";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
+import { getTheme } from "@/core/design-systems";
 
 interface ComponentDetailPageProps {
   params: Promise<{ slug: string }>;
+}
+
+const previewTheme = getTheme("light");
+
+function DesignSystemPreviewShell({ children }: { children: React.ReactNode }) {
+  return (
+    <MuiThemeProvider theme={previewTheme}>
+      <CssBaseline />
+      {children}
+    </MuiThemeProvider>
+  );
 }
 
 export default function ComponentDetailPage({
@@ -38,286 +61,265 @@ export default function ComponentDetailPage({
     notFound();
   }
 
+  const detailConfig = getComponentDetailConfig(slug);
+
   return (
-    <div className="max-w-5xl mx-auto space-y-12">
+    <div className="max-w-5xl mx-auto space-y-15">
       {/* 헤더 */}
-      <div>
-        <div className="flex items-center gap-3 mb-2">
+      <div className="space-y-3">
+        <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold">{component.name}</h1>
           <span className="px-2 py-1 text-xs bg-muted text-muted-foreground rounded">
             {getCategoryLabel(component.category)}
           </span>
         </div>
         <p className="text-sm text-muted-foreground">{component.description}</p>
+        {detailConfig?.designNote && (
+          <div className="space-y-4">
+            <Alert className="border-primary/20 bg-primary/5">
+              <CheckCircle2Icon className="h-4 w-4" />
+              <div>
+                <AlertTitle className="text-sm font-semibold">
+                  디자인 노트
+                </AlertTitle>
+                <AlertDescription className="text-sm text-gray-500 space-y-2">
+                  <ul className="list-disc list-inside space-y-1">
+                    {(Array.isArray(detailConfig.designNote)
+                      ? detailConfig.designNote
+                      : [detailConfig.designNote]
+                    ).map((note, idx) => (
+                      <li key={idx}>{note}</li>
+                    ))}
+                  </ul>
+                  {component.category === "inputs" && (
+                    <p className="text-xs">
+                      <Link
+                        href="/tokens#augment-colors"
+                        className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+                      >
+                        Augment 컬러 토큰 자세히 보기
+                        <ExternalLink className="h-3 w-3" />
+                      </Link>
+                    </p>
+                  )}
+                </AlertDescription>
+              </div>
+            </Alert>
+          </div>
+        )}
       </div>
-
       {/* 기본 Preview */}
       {component.componentName && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">기본 예제</h2>
-          <div className="border rounded-lg p-6 bg-background">
-            <div className="flex flex-wrap gap-4 items-center">
-              <ComponentPreview
-                componentName={component.componentName}
-                props={component.previewProps || {}}
-                noContainer={true}
-              />
-              {component.slug === "button" && (
-                <>
-                  <ComponentPreview
-                    componentName={component.componentName}
-                    props={{
-                      ...component.previewProps,
-                      color: "augment/primary/600",
-                    }}
-                    noContainer={true}
-                  />
-                  <ComponentPreview
-                    componentName={component.componentName}
-                    props={{
-                      ...component.previewProps,
-                      color: "augment/red/500",
-                    }}
-                    noContainer={true}
-                  />
-                  <ComponentPreview
-                    componentName={component.componentName}
-                    props={{
-                      ...component.previewProps,
-                      color: "augment/green/600",
-                    }}
-                    noContainer={true}
-                  />
-                </>
-              )}
-            </div>
+        <DesignSystemPreviewShell>
+          <div className="space-y-4">
+            {detailConfig?.usageExamples &&
+              detailConfig.usageExamples
+                .filter(
+                  (example) => !example.section || example.section === "basic"
+                )
+                .map((example, idx) => (
+                  <div key={idx} className="space-y-4">
+                    {example.title && (
+                      <h3 className="text-base font-semibold">
+                        {example.title}
+                      </h3>
+                    )}
+                    <div className="border rounded-lg p-6 bg-background">
+                      <div className="flex flex-wrap gap-4 items-center">
+                        {example.render &&
+                          (() => {
+                            const Render = example.render!;
+                            return <Render />;
+                          })()}
+                      </div>
+                    </div>
+                    <CodeSnippet code={example.code} />
+                  </div>
+                ))}
           </div>
-        </div>
+        </DesignSystemPreviewShell>
       )}
 
       {/* Variants */}
       {component.variants && component.variants.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Variants</h2>
-          <Tabs defaultValue={component.variants[0]} className="w-full">
-            <TabsList>
-              {component.variants.map((variant) => (
-                <TabsTrigger key={variant} value={variant}>
-                  {variant}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {component.variants.map((variant) => (
-              <TabsContent key={variant} value={variant}>
-                <div className="border rounded-lg p-6 bg-background">
-                  <div className="flex flex-wrap gap-4 items-center">
-                    <ComponentPreview
-                      componentName={component.componentName || ""}
-                      props={{
-                        ...component.previewProps,
-                        variant,
-                      }}
-                      noContainer={true}
-                    />
-                    {component.slug === "button" && (
-                      <>
-                        <ComponentPreview
-                          componentName={component.componentName || ""}
-                          props={{
-                            ...component.previewProps,
-                            variant,
-                            color: "augment/primary/600",
-                          }}
-                          noContainer={true}
-                        />
-                        <ComponentPreview
-                          componentName={component.componentName || ""}
-                          props={{
-                            ...component.previewProps,
-                            variant,
-                            color: "augment/red/500",
-                          }}
-                          noContainer={true}
-                        />
-                        <ComponentPreview
-                          componentName={component.componentName || ""}
-                          props={{
-                            ...component.previewProps,
-                            variant,
-                            color: "augment/green/600",
-                          }}
-                          noContainer={true}
-                        />
-                      </>
+        <DesignSystemPreviewShell>
+          <div className="space-y-4">
+            {/* Color 조합 예제 - 탭과 무관하게 공통으로 표시 */}
+            {detailConfig?.usageExamples &&
+              detailConfig.usageExamples
+                .filter((example) => example.section === "variants")
+                .map((example, idx) => (
+                  <div key={idx} className="space-y-3 mt-4">
+                    {example.title && (
+                      <h3 className="text-base font-semibold">
+                        {example.title}
+                      </h3>
                     )}
+                    <div className="border rounded-lg p-6 bg-background">
+                      <div className="flex flex-wrap gap-4 items-center">
+                        {example.render &&
+                          (() => {
+                            const Render = example.render!;
+                            return <Render />;
+                          })()}
+                      </div>
+                    </div>
+                    <CodeSnippet code={example.code} />
                   </div>
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </div>
+                ))}
+          </div>
+        </DesignSystemPreviewShell>
       )}
 
       {/* 커스터마이징 사항 */}
-      {component.slug === "button" && (
+      {detailConfig?.customization && (
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">커스터마이징 사항</h2>
-          <div className="space-y-6">
+          <div className="space-y-20">
             {/* 추가된 Props */}
-            <div>
-              <h3 className="text-base font-semibold mb-3">추가된 Props</h3>
-              <div className="space-y-3">
-                <div className="border rounded-lg p-4 bg-muted/50">
-                  <div className="font-mono text-sm font-semibold mb-1">
-                    inactivated?: boolean
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    비활성화 상태를 제어합니다.{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      disabled
-                    </code>
-                    와 달리 시각적으로는 활성화 상태를 유지하면서 상호작용만
-                    비활성화합니다.
-                  </p>
+            {detailConfig.customization.addedProps &&
+              detailConfig.customization.addedProps.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-base font-semibold">추가된 Props</h3>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-40">Prop</TableHead>
+                        <TableHead className="w-[200px]">Type</TableHead>
+                        <TableHead>설명</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {detailConfig.customization.addedProps.map((prop) => (
+                        <TableRow key={prop.name}>
+                          <TableCell className="font-mono text-xs">
+                            <span className="font-semibold">{prop.name}?</span>
+                          </TableCell>
+                          <TableCell className="font-mono text-xs">
+                            <span className="font-semibold">{prop.type}</span>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {prop.description}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
-                <div className="border rounded-lg p-4 bg-muted/50">
-                  <div className="font-mono text-sm font-semibold mb-1">
-                    frontBumper?: &apos;thick&apos; | &apos;thin&apos; |
-                    &apos;both&apos;
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    버튼 앞쪽(왼쪽) 여백을 제어합니다. 아이콘과 텍스트 사이
-                    간격을 조정할 때 사용합니다.
-                  </p>
-                </div>
-                <div className="border rounded-lg p-4 bg-muted/50">
-                  <div className="font-mono text-sm font-semibold mb-1">
-                    backBumper?: &apos;thick&apos; | &apos;thin&apos; |
-                    &apos;both&apos;
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    버튼 뒤쪽(오른쪽) 여백을 제어합니다. 텍스트와 아이콘 사이
-                    간격을 조정할 때 사용합니다.
-                  </p>
-                </div>
-                <div className="border rounded-lg p-4 bg-muted/50">
-                  <div className="font-mono text-sm font-semibold mb-1">
-                    relaxBorder?: boolean
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    테두리 색상을 완화합니다. outlined variant에서 테두리
-                    투명도를 낮춥니다.
-                  </p>
-                </div>
-              </div>
-            </div>
+              )}
 
             {/* 기본값 변경 */}
-            <div>
-              <h3 className="text-base font-semibold mb-3">기본값 변경</h3>
-              <div className="border rounded-lg p-4 bg-muted/50">
-                <ul className="space-y-2 text-sm">
-                  <li>
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      variant
-                    </code>
-                    :{" "}
-                    <span className="text-muted-foreground">
-                      &apos;contained&apos;
-                    </span>{" "}
-                    (MUI 기본값: &apos;text&apos;)
-                  </li>
-                  <li>
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      size
-                    </code>
-                    :{" "}
-                    <span className="text-muted-foreground">
-                      &apos;small&apos;
-                    </span>{" "}
-                    (MUI 기본값: &apos;medium&apos;)
-                  </li>
-                  <li>
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      color
-                    </code>
-                    :{" "}
-                    <span className="text-muted-foreground">
-                      &apos;augment/gray/800&apos;
-                    </span>{" "}
-                    (커스텀 색상 팔레트)
-                  </li>
-                  <li>
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      disableElevation
-                    </code>
-                    : <span className="text-muted-foreground">true</span> (MUI
-                    기본값: false)
-                  </li>
-                </ul>
-              </div>
-            </div>
+            {detailConfig.customization.defaultValueChanges &&
+              detailConfig.customization.defaultValueChanges.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-base font-semibold">기본값 변경</h3>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-40">Prop</TableHead>
+                        <TableHead>우리 기본값</TableHead>
+                        <TableHead>MUI 기본값</TableHead>
+                        <TableHead>비고</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {detailConfig.customization.defaultValueChanges.map(
+                        (change, idx) => (
+                          <TableRow key={idx}>
+                            <TableCell className="font-mono text-xs">
+                              <span className="font-semibold">
+                                {change.prop}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              <span className="font-semibold">
+                                {change.customValue}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              {change.muiDefault ?? "-"}
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              {change.note ?? "-"}
+                            </TableCell>
+                          </TableRow>
+                        )
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
 
             {/* 추가된 Variants & Sizes */}
-            <div>
-              <h3 className="text-base font-semibold mb-3">
-                추가된 Variants & Sizes
-              </h3>
-              <div className="border rounded-lg p-4 bg-muted/50">
-                <ul className="space-y-2 text-sm">
-                  <li>
-                    <strong>Variants:</strong>{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      customA
-                    </code>
-                    ,{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      customB
-                    </code>
-                  </li>
-                  <li>
-                    <strong>Sizes:</strong>{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      extraLarge
-                    </code>
-                    ,{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      customA
-                    </code>
-                    ,{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      customB
-                    </code>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            {detailConfig.customization.additionalVariants &&
+              detailConfig.customization.additionalVariants.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-base font-semibold">
+                    추가된 Variants & Sizes
+                  </h3>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-40">타입</TableHead>
+                        <TableHead>값</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {detailConfig.customization.additionalVariants.map(
+                        (variant, idx) => (
+                          <TableRow key={idx}>
+                            <TableCell className="text-sm font-semibold">
+                              {variant.type === "variant" ? "Variant" : "Size"}
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                              {variant.values.map((value, i) => (
+                                <React.Fragment key={value}>
+                                  <code className="text-xs bg-background px-1 py-0.5 rounded">
+                                    {value}
+                                  </code>
+                                  {i < variant.values.length - 1 && " "}
+                                </React.Fragment>
+                              ))}
+                            </TableCell>
+                          </TableRow>
+                        )
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
 
             {/* 스타일 변경 */}
-            <div>
-              <h3 className="text-base font-semibold mb-3">스타일 변경</h3>
-              <div className="border rounded-lg p-4 bg-muted/50">
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>
-                    • children을{" "}
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      span
-                    </code>
-                    으로 감싸서 커스텀 스타일링 적용
-                  </li>
-                  <li>
-                    • 텍스트 변환 제거 (
-                    <code className="text-xs bg-background px-1 py-0.5 rounded">
-                      textTransform: &apos;none&apos;
-                    </code>
-                    )
-                  </li>
-                  <li>• 커스텀 색상 팔레트 사용 (augment/gray/800 등)</li>
-                  <li>• Ripple 애니메이션 커스터마이징</li>
-                  <li>• contained variant에 기본 테두리 추가</li>
-                </ul>
-              </div>
-            </div>
+            {detailConfig.customization.styleChanges &&
+              detailConfig.customization.styleChanges.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-base font-semibold">스타일 변경</h3>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>설명</TableHead>
+                        <TableHead className="w-[220px]">관련 코드</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {detailConfig.customization.styleChanges.map(
+                        (change, idx) => (
+                          <TableRow key={idx}>
+                            <TableCell className="text-sm text-muted-foreground">
+                              <span className="font-semibold">
+                                {change.description}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-xs font-mono text-muted-foreground">
+                              {change.code ?? "-"}
+                            </TableCell>
+                          </TableRow>
+                        )
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
           </div>
         </div>
       )}
@@ -325,18 +327,30 @@ export default function ComponentDetailPage({
       {/* 사용법 링크 */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">사용법</h2>
-        <p className="text-muted-foreground mb-4">
-          자세한 사용법과 API 문서는 MUI 공식 문서를 참고하세요.
-        </p>
-        <Link
-          href={`https://mui.com/material-ui/react-${component.slug}/`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          MUI {component.name} 문서 보기
-          <ExternalLink className="h-4 w-4" />
-        </Link>
+        <Alert>
+          <Zap className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+          <div>
+            <AlertTitle className="text-sm font-semibold">
+              MUI 공식 문서
+            </AlertTitle>
+            <AlertDescription className="text-sm text-gray-500 space-y-1">
+              <p>
+                기본적인 사용법과 API 스펙은{" "}
+                <span className="font-semibold">MUI 공식 문서</span>를 기준으로
+                합니다.
+              </p>
+              <Link
+                href={`https://mui.com/material-ui/react-${component.slug}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+              >
+                MUI {component.name} 문서 바로가기
+                <ExternalLink className="h-3 w-3" />
+              </Link>
+            </AlertDescription>
+          </div>
+        </Alert>
       </div>
     </div>
   );

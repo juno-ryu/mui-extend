@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Palette, Monitor, Layers, Box, Sparkles } from "lucide-react";
@@ -317,6 +317,16 @@ const zIndexValues = [
 
 export default function TokensPage() {
   const [colorMode, setColorMode] = useState<"light" | "dark">("light");
+  const [tab, setTab] = useState<string>("colors");
+
+  // URL 해시(#augment-colors)로 진입했을 때 Augment 탭을 기본 선택
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (hash === "#augment-colors" || hash === "#augment") {
+      setTab("augment");
+    }
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -334,7 +344,7 @@ export default function TokensPage() {
       <Separator />
 
       {/* Tabs */}
-      <Tabs defaultValue="colors" className="space-y-6">
+      <Tabs value={tab} onValueChange={setTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="colors" className="flex items-center gap-2">
             <Palette className="h-4 w-4" />
@@ -462,7 +472,11 @@ export default function TokensPage() {
         </TabsContent>
 
         {/* Augment Colors Tab */}
-        <TabsContent value="augment" className="space-y-8">
+        <TabsContent
+          value="augment"
+          id="augment-colors"
+          className="space-y-8"
+        >
           <div>
             <h2 className="text-xl font-semibold">Augment 컬러 팔레트</h2>
             <p className="text-sm text-muted-foreground mt-2">
