@@ -7,8 +7,8 @@ export function AlertTitleBasicExample() {
     <Stack direction="column" spacing={2}>
       <Alert color="augment/cyan/500">
         <AlertTitle>정보 알림</AlertTitle>
-        이것은 제목이 있는 알림입니다. AlertTitle은 component: 'strong', fontSize:
-        '1.04em', fontWeight: 700이 기본값으로 설정되어 있습니다.
+        이것은 제목이 있는 알림입니다. AlertTitle은 component: &apos;strong&apos;, fontSize:
+        &apos;1.04em&apos;, fontWeight: 700이 기본값으로 설정되어 있습니다.
       </Alert>
       <Alert color="augment/yellow/500">
         <AlertTitle>경고 알림</AlertTitle>

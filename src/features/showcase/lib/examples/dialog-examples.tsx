@@ -24,7 +24,7 @@ export function DialogBasicExample() {
         <DialogContent>
           <Typography>
             이것은 기본 다이얼로그입니다. PaperProps에 elevation: 24, minWidth:
-            '312px', borderRadius: '24px'가 기본값으로 설정되어 있습니다.
+            &apos;312px&apos;, borderRadius: &apos;24px&apos;가 기본값으로 설정되어 있습니다.
           </Typography>
         </DialogContent>
         <DialogActions>
