@@ -7,7 +7,8 @@ import {
 export const textFieldConfig: ComponentDetailConfig = {
   slug: "text-field",
   designNote: [
-    "inputs 카테고리 컴포넌트들은 augment 컬러 토큰(예: augment/gray/800)을 활용해 텍스트 입력 같은 인터랙티브 요소의 색상을 관리합니다.",
+    "TextField는다양한 variant와 size를 지원하며, 상태에 따라 다른 스타일을 적용할 수 있습니다.",
+    "color 토큰은 기본으로 primary/600으로 지정되어있습니다.",
   ],
   usageExamples: [
     {

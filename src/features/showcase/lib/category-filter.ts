@@ -65,7 +65,6 @@ export function getComponentsCountByCategory(
 
   return {
     inputs: counts.inputs || 0,
-    layout: counts.layout || 0,
     navigation: counts.navigation || 0,
     feedback: counts.feedback || 0,
     "data-display": counts["data-display"] || 0,

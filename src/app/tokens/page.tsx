@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Palette, Monitor, Layers, Box, Sparkles } from "lucide-react";
+import { Palette, Monitor, Layers, Box, Sparkles, Type } from "lucide-react";
 import { AppBreadcrumb } from "@/components/layout/breadcrumb";
 
 // Breakpoint 데이터
@@ -316,6 +316,197 @@ const zIndexValues = [
   { name: "header", value: 2, description: "헤더" },
 ];
 
+// Typography Variant 데이터
+const typographyVariants = [
+  {
+    category: "Headline",
+    description: "대제목 스타일",
+    variants: [
+      {
+        name: "headline/h1",
+        fontSize: "40px",
+        lineHeight: 1.4,
+        letterSpacing: 0,
+      },
+      {
+        name: "headline/h2",
+        fontSize: "36px",
+        lineHeight: 1.33333,
+        letterSpacing: 0,
+      },
+      {
+        name: "headline/h3",
+        fontSize: "32px",
+        lineHeight: 1.3125,
+        letterSpacing: 0,
+      },
+      {
+        name: "headline/h4",
+        fontSize: "30px",
+        lineHeight: 1.33333,
+        letterSpacing: 0,
+      },
+    ],
+  },
+  {
+    category: "Title",
+    description: "제목 스타일",
+    variants: [
+      {
+        name: "title/title1",
+        fontSize: "28px",
+        lineHeight: 1.28571,
+        letterSpacing: 0,
+      },
+      {
+        name: "title/title2",
+        fontSize: "26px",
+        lineHeight: 1.30769,
+        letterSpacing: 0,
+      },
+      {
+        name: "title/title3",
+        fontSize: "24px",
+        lineHeight: 1.33333,
+        letterSpacing: 0,
+      },
+      {
+        name: "title/title4",
+        fontSize: "22px",
+        lineHeight: 1.45455,
+        letterSpacing: 0,
+      },
+      {
+        name: "title/title5",
+        fontSize: "20px",
+        lineHeight: 1.4,
+        letterSpacing: 0,
+      },
+    ],
+  },
+  {
+    category: "Body",
+    description: "본문 텍스트 스타일 (기본: body/body3)",
+    variants: [
+      {
+        name: "body/body1",
+        fontSize: "18px",
+        lineHeight: 1.44444,
+        letterSpacing: 0,
+      },
+      {
+        name: "body/body2",
+        fontSize: "17px",
+        lineHeight: 1.41176,
+        letterSpacing: 0,
+      },
+      {
+        name: "body/body3",
+        fontSize: "16px",
+        lineHeight: 1.5,
+        letterSpacing: 0,
+        isDefault: true,
+      },
+      {
+        name: "body/body4",
+        fontSize: "15px",
+        lineHeight: 1.46667,
+        letterSpacing: 0,
+      },
+      {
+        name: "body/body5",
+        fontSize: "14px",
+        lineHeight: 1.42857,
+        letterSpacing: 0,
+      },
+      {
+        name: "body/body6",
+        fontSize: "13px",
+        lineHeight: 1.38462,
+        letterSpacing: 0,
+      },
+    ],
+  },
+  {
+    category: "Label",
+    description: "라벨 및 작은 텍스트 스타일",
+    variants: [
+      {
+        name: "label/label1",
+        fontSize: "12px",
+        lineHeight: 1.33333,
+        letterSpacing: 0,
+      },
+      {
+        name: "label/label2",
+        fontSize: "11px",
+        lineHeight: 1.27273,
+        letterSpacing: 0,
+      },
+      {
+        name: "label/label3",
+        fontSize: "10px",
+        lineHeight: 1.2,
+        letterSpacing: 0,
+      },
+    ],
+  },
+  {
+    category: "Article",
+    description: "기사 및 긴 본문 스타일",
+    variants: [
+      {
+        name: "aritcle/desktop/title",
+        fontSize: "24px",
+        lineHeight: 1.58333,
+        letterSpacing: 0,
+      },
+      {
+        name: "aritcle/mobile/title",
+        fontSize: "20px",
+        lineHeight: 1.6,
+        letterSpacing: 0,
+      },
+      {
+        name: "aritcle/desktop/body",
+        fontSize: "16px",
+        lineHeight: 2.0,
+        letterSpacing: 0,
+      },
+      {
+        name: "aritcle/mobile/body",
+        fontSize: "14px",
+        lineHeight: 2.0,
+        letterSpacing: 0,
+      },
+    ],
+  },
+  {
+    category: "Information",
+    description: "정보 및 요약 텍스트 스타일",
+    variants: [
+      {
+        name: "infornation/info1",
+        fontSize: "16px",
+        lineHeight: 1.625,
+        letterSpacing: 0,
+      },
+      {
+        name: "infornation/info2",
+        fontSize: "15px",
+        lineHeight: 1.6,
+        letterSpacing: 0,
+      },
+      {
+        name: "infornation/info3",
+        fontSize: "14px",
+        lineHeight: 1.57143,
+        letterSpacing: 0,
+      },
+    ],
+  },
+];
+
 export default function TokensPage() {
   const [colorMode, setColorMode] = useState<"light" | "dark">("light");
   const [tab, setTab] = useState<string>("colors");
@@ -332,10 +523,7 @@ export default function TokensPage() {
   return (
     <div className="space-y-8">
       <AppBreadcrumb
-        items={[
-          { label: "홈", href: "/" },
-          { label: "디자인 토큰" },
-        ]}
+        items={[{ label: "홈", href: "/" }, { label: "디자인 토큰" }]}
       />
 
       {/* Header */}
@@ -353,36 +541,66 @@ export default function TokensPage() {
 
       {/* Tabs */}
       <Tabs value={tab} onValueChange={setTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7">
-          <TabsTrigger value="colors" className="flex items-center gap-2">
-            <Palette className="h-4 w-4" />
-            <span>Colors</span>
-          </TabsTrigger>
-          <TabsTrigger value="augment" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" />
-            <span>Augment</span>
-          </TabsTrigger>
-          <TabsTrigger value="custom" className="flex items-center gap-2">
-            <Palette className="h-4 w-4" />
-            <span>Custom</span>
-          </TabsTrigger>
-          <TabsTrigger value="state" className="flex items-center gap-2">
-            <Palette className="h-4 w-4" />
-            <span>State</span>
-          </TabsTrigger>
-          <TabsTrigger value="breakpoints" className="flex items-center gap-2">
-            <Monitor className="h-4 w-4" />
-            <span>Breakpoints</span>
-          </TabsTrigger>
-          <TabsTrigger value="shadows" className="flex items-center gap-2">
-            <Box className="h-4 w-4" />
-            <span>Shadows</span>
-          </TabsTrigger>
-          <TabsTrigger value="zindex" className="flex items-center gap-2">
-            <Layers className="h-4 w-4" />
-            <span>Z-Index</span>
-          </TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+          <TabsList className="inline-flex w-full md:grid md:grid-cols-8 min-w-max md:min-w-0">
+            <TabsTrigger
+              value="typography"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Type className="h-4 w-4 shrink-0" />
+              <span>Typography</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="colors"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Palette className="h-4 w-4 shrink-0" />
+              <span>Colors</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="augment"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Sparkles className="h-4 w-4 shrink-0" />
+              <span>Augment</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="custom"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Palette className="h-4 w-4 shrink-0" />
+              <span>Custom</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="state"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Palette className="h-4 w-4 shrink-0" />
+              <span>State</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="breakpoints"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Monitor className="h-4 w-4 shrink-0" />
+              <span>Breakpoints</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="shadows"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Box className="h-4 w-4 shrink-0" />
+              <span>Shadows</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="zindex"
+              className="flex items-center gap-2 whitespace-nowrap"
+            >
+              <Layers className="h-4 w-4 shrink-0" />
+              <span>Z-Index</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Colors Tab */}
         <TabsContent value="colors" className="space-y-8">
@@ -480,11 +698,7 @@ export default function TokensPage() {
         </TabsContent>
 
         {/* Augment Colors Tab */}
-        <TabsContent
-          value="augment"
-          id="augment-colors"
-          className="space-y-8"
-        >
+        <TabsContent value="augment" id="augment-colors" className="space-y-8">
           <div>
             <h2 className="text-xl font-semibold">Augment 컬러 팔레트</h2>
             <p className="text-sm text-muted-foreground mt-2">
@@ -833,6 +1047,105 @@ export default function TokensPage() {
                   </div>
                 </div>
               ))}
+          </div>
+        </TabsContent>
+
+        {/* Typography Tab */}
+        <TabsContent value="typography" className="space-y-8">
+          <div>
+            <h2 className="text-xl font-semibold">Typography Variants</h2>
+            <p className="text-sm text-muted-foreground mt-2">
+              MUI Extend 디자인 시스템의 타이포그래피 variant 토큰입니다.
+              <br />
+              기본 variant는{" "}
+              <code className="bg-muted px-1 py-0.5 rounded">body/body3</code>
+              이며, 각 variant는 fontSize, lineHeight, letterSpacing을
+              포함합니다.
+            </p>
+          </div>
+
+          {typographyVariants.map((category) => (
+            <div key={category.category} className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold">{category.category}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {category.description}
+                </p>
+              </div>
+              <div className="space-y-3">
+                {category.variants.map((variant) => (
+                  <div
+                    key={variant.name}
+                    className="border rounded-lg p-4 space-y-3"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <code className="text-sm font-medium bg-muted px-2 py-1 rounded">
+                            {variant.name}
+                          </code>
+                          {variant.isDefault && (
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
+                              기본값
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className="text-foreground"
+                          style={{
+                            fontSize: variant.fontSize,
+                            lineHeight: variant.lineHeight,
+                            letterSpacing: `${variant.letterSpacing}px`,
+                          }}
+                        >
+                          {variant.name} - 예시 텍스트입니다. <br />
+                          The quick brown fox jumps over the lazy dog.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t">
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">
+                          Font Size
+                        </p>
+                        <code className="text-sm font-mono">
+                          {variant.fontSize}
+                        </code>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">
+                          Line Height
+                        </p>
+                        <code className="text-sm font-mono">
+                          {variant.lineHeight}
+                        </code>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">
+                          Letter Spacing
+                        </p>
+                        <code className="text-sm font-mono">
+                          {variant.letterSpacing}px
+                        </code>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Separator />
+            </div>
+          ))}
+
+          <div className="bg-muted/50 border rounded-lg p-4 space-y-2">
+            <h4 className="font-semibold">💡 사용 방법</h4>
+            <p className="text-sm text-muted-foreground">
+              Typography 컴포넌트에{" "}
+              <code className="bg-background px-1 py-0.5 rounded">variant</code>{" "}
+              prop을 전달하여 사용합니다.
+            </p>
+            <code className="text-xs bg-background px-3 py-2 rounded block mt-2">
+              {`<Typography variant="headline/h1">제목</Typography>`}
+            </code>
           </div>
         </TabsContent>
       </Tabs>

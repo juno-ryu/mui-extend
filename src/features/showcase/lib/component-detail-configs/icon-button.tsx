@@ -8,11 +8,12 @@ import {
 
 export const iconButtonConfig: ComponentDetailConfig = {
   slug: "icon-button",
+  isAugmentColor: true,
   designNote: [
     "텍스트 없이 아이콘만 사용하는 액션 버튼을 위해, 버튼 대비 더 미니멀한 인터랙션 패턴이 필요해서 분리된 컴포넌트입니다.",
     "모든 size에서 padding을 0으로 고정하고, size에 따라 DesignIcon 크기만 달리해(16/18/20/24px) 아이콘 그리드에 정확히 맞도록 설계했습니다.",
     "hover 배경과 ripple 효과를 최소화(transparent + ripple 제거)해서, 리스트/툴바 등 조밀한 UI에서도 시각적 노이즈 없이 사용할 수 있습니다.",
-    "color는 augment 컬러 토큰(예: augment/gray/800, augment/primary/600)을 기본으로 사용하며, 잘못된 문자열이 들어오면 안전하게 기본 토큰으로 폴백되도록 검증 로직을 넣었습니다.",
+    "IconButton 컴포넌트는 augment 컬러 토큰(예: augment/gray/800)을 활용해 버튼/입력 같은 인터랙티브 요소의 색상을 관리합니다.",
   ],
   usageExamples: [
     {

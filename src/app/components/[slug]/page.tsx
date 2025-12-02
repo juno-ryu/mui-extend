@@ -98,10 +98,12 @@ export default function ComponentDetailPage({
                       ? detailConfig.designNote
                       : [detailConfig.designNote]
                     ).map((note, idx) => (
-                      <li key={idx}>{note}</li>
+                      <li key={idx} className="text-xs">
+                        {note}
+                      </li>
                     ))}
                   </ul>
-                  {component.category === "inputs" && (
+                  {detailConfig?.isAugmentColor && (
                     <p className="text-xs">
                       <Link
                         href="/tokens#augment-colors"

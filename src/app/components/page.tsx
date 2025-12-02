@@ -17,12 +17,10 @@ const CATEGORY_MAP: CategoryMap = {
   feedback: "Feedback",
   surfaces: "Surfaces",
   navigation: "Navigation",
-  layout: "Layout",
 };
 
 const CATEGORY_ORDER = [
   "Input",
-  "Layout",
   "Navigation",
   "Feedback",
   "Data display",

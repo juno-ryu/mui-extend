@@ -19,7 +19,7 @@ export interface DefaultValueChange {
 }
 
 export interface AdditionalVariant {
-  type: "variant" | "size";
+  type: "variant" | "size" | "margin";
   values: string[];
 }
 
@@ -45,6 +45,8 @@ export interface CodeExample {
 export interface ComponentDetailConfig {
   slug: string;
   designNote?: string | string[];
+  // augment 컬러 토큰을 사용하는지 여부
+  isAugmentColor?: boolean;
   // 코드 예제
   usageExamples?: CodeExample[];
   // 커스터마이징 사항

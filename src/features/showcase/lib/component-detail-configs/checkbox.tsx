@@ -7,8 +7,9 @@ import {
 
 export const checkboxConfig: ComponentDetailConfig = {
   slug: "checkbox",
+  isAugmentColor: true,
   designNote: [
-    "inputs 카테고리 컴포넌트들은 augment 컬러 토큰(예: augment/gray/800)을 활용해 텍스트 입력 같은 인터랙티브 요소의 색상을 관리합니다.",
+    "Checkbox 컴포넌트는 augment 컬러 토큰(예: augment/gray/800)을 활용해 텍스트 입력 같은 인터랙티브 요소의 색상을 관리합니다.",
   ],
   usageExamples: [
     {
@@ -183,4 +184,3 @@ export function CheckboxColorsExample() {
     ],
   },
 };
-

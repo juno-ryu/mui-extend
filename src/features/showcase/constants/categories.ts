@@ -1,6 +1,5 @@
 export type ComponentCategory =
   | "inputs"
-  | "layout"
   | "navigation"
   | "feedback"
   | "data-display"
@@ -8,7 +7,6 @@ export type ComponentCategory =
 
 export const CATEGORIES: ComponentCategory[] = [
   "inputs",
-  "layout",
   "navigation",
   "feedback",
   "data-display",
@@ -17,7 +15,6 @@ export const CATEGORIES: ComponentCategory[] = [
 
 export const CATEGORY_LABELS: Record<ComponentCategory, string> = {
   inputs: "Inputs",
-  layout: "Layout",
   navigation: "Navigation",
   feedback: "Feedback",
   "data-display": "Data Display",
@@ -26,7 +23,6 @@ export const CATEGORY_LABELS: Record<ComponentCategory, string> = {
 
 export const CATEGORY_DESCRIPTIONS: Record<ComponentCategory, string> = {
   inputs: "사용자 입력을 받는 컴포넌트 (Button, Input, Textarea, Select 등)",
-  layout: "레이아웃을 구성하는 컴포넌트 (Container, Grid, Stack 등)",
   navigation: "네비게이션 관련 컴포넌트 (Menu, Tabs, Breadcrumbs 등)",
   feedback:
     "사용자에게 피드백을 제공하는 컴포넌트 (Alert, Snackbar, Dialog 등)",

@@ -7,8 +7,9 @@ import {
 
 export const switchConfig: ComponentDetailConfig = {
   slug: "switch",
+  isAugmentColor: true,
   designNote: [
-    "inputs 카테고리 컴포넌트들은 augment 컬러 토큰(예: augment/gray/800)을 활용해 텍스트 입력 같은 인터랙티브 요소의 색상을 관리합니다.",
+    "Switch 컴포넌트는 augment 컬러 토큰(예: augment/gray/800)을 활용해 버튼/입력 같은 인터랙티브 요소의 색상을 관리합니다.",
   ],
   usageExamples: [
     {
@@ -142,8 +143,7 @@ export function SwitchColorsExample() {
           "disabled 상태에서 opacity 0.3을 적용하여 비활성화된 상태를 명확히 표시합니다.",
       },
       {
-        description:
-          "disabled 상태의 track은 opacity 0.6을 적용합니다.",
+        description: "disabled 상태의 track은 opacity 0.6을 적용합니다.",
       },
       {
         description:
@@ -152,4 +152,3 @@ export function SwitchColorsExample() {
     ],
   },
 };
-
